@@ -1,253 +1,661 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OLKANAS - Olimpiade Sains dan Kreativitas Siswa</title>
+    <title>OLASKA - Olimpiade Sains dan Kreativitas Siswa</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f4f8',
-                            100: '#d9e2ec',
-                            500: '#334e68',
-                            800: '#102a43',
-                            900: '#0b1b29',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Custom Utility untuk Aspect Ratio Poster 1:1 */
-        .aspect-square-custom {
-            aspect-ratio: 1 / 1;
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Color Variables */
+        :root {
+            --color-navy: #112B73;        /* Biru Tua - Primary */
+            --color-gold: #F5B214;        /* Kuning Emas - Accent */
+            --color-red: #EF4444;         /* Merah - CTA */
+            --color-navy-text: #182E78;   /* Biru Teks */
+            --color-white: #FFFFFF;       /* Putih */
+            --color-navy-light: #1a3a96;  /* Biru Tua Lighter */
+            --color-gold-light: #ffc849;  /* Kuning Lighter */
+        }
+        
+        /* Hamburger Menu Animation */
+        .hamburger-line {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .hamburger-open .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+        
+        .hamburger-open .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger-open .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        
+        /* Mobile Menu Slide Animation */
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Sidebar Sticky */
+        .sidebar-wrapper {
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        
+        /* Custom Tailwind Utilities */
+        .bg-navy {
+            background-color: var(--color-navy);
+        }
+        
+        .bg-gold {
+            background-color: var(--color-gold);
+        }
+        
+        .bg-red {
+            background-color: var(--color-red);
+        }
+        
+        .text-navy {
+            color: var(--color-navy);
+        }
+        
+        .text-gold {
+            color: var(--color-gold);
+        }
+        
+        .text-red {
+            color: var(--color-red);
+        }
+        
+        .border-navy {
+            border-color: var(--color-navy);
+        }
+        
+        .border-gold {
+            border-color: var(--color-gold);
+        }
+        
+        /* Hover Effects */
+        .hover-gold:hover {
+            background-color: var(--color-gold-light);
+        }
+        
+        .btn-cta {
+            background-color: var(--color-red);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .btn-cta:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: var(--color-navy);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--color-navy-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(17, 43, 115, 0.3);
+        }
+        
+        /* Accent Line */
+        .accent-line-top {
+            border-top: 4px solid var(--color-gold);
+        }
+        
+        .accent-line-left {
+            border-left: 4px solid var(--color-gold);
+        }
+        
+        /* Badge Styles */
+        .badge-navy {
+            background-color: #e8f1ff;
+            color: var(--color-navy-text);
+            border: 1px solid #c7d9f7;
+        }
+        
+        .badge-gold {
+            background-color: #fffbf0;
+            color: #8b6600;
+            border: 1px solid #ffd700;
+        }
+        
+        .badge-red {
+            background-color: #fff0f0;
+            color: var(--color-red);
+            border: 1px solid #fcc;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
-
-    <header class="lg:hidden sticky top-0 z-50 bg-slate-900 text-white px-4 py-3 shadow-md flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-            <span class="font-black text-xl tracking-wider text-white">OLKANAS</span>
-        </div>
-        <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500" aria-label="Buka Menu">
-            <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </button>
-    </header>
-
-    <div id="mobile-menu-backdrop" class="fixed inset-0 bg-slate-900/60 z-40 hidden lg:hidden transition-opacity duration-300 opacity-0"></div>
-    <aside id="mobile-menu" class="fixed top-0 left-0 bottom-0 w-64 bg-slate-900 text-slate-100 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden flex flex-col justify-between p-6">
-        <div>
-            <div class="pb-6 border-b border-slate-800">
-                <h2 class="text-2xl font-black text-white tracking-wider">OLKANAS</h2>
-                <p class="text-xs text-slate-400 mt-1">Olimpiade Sains & Kreativitas Siswa</p>
-            </div>
-            <nav class="mt-6 space-y-2">
-                <a href="#beranda" class="mobile-nav-link block px-4 py-3 rounded-lg text-sm font-semibold bg-slate-800 text-white transition">Beranda</a>
-                <a href="#history" class="mobile-nav-link block px-4 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition">History (Event Lalu)</a>
-                <a href="#hasil-lomba" class="mobile-nav-link block px-4 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition">Hasil Lomba</a>
-                <a href="#timeline" class="mobile-nav-link block px-4 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition">Timeline & Regulasi</a>
-            </nav>
-        </div>
-        <div class="pt-6 border-t border-slate-800">
-            <a href="https://google.com" target="_blank" rel="noopener noreferrer" class="block w-full text-center py-3 px-4 bg-white text-slate-900 font-bold rounded-lg shadow hover:bg-slate-100 transition">
-                Daftar Sekarang
-            </a>
-        </div>
-    </aside>
-    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row min-h-screen">
-
-        <aside class="hidden lg:block w-72 bg-slate-900 text-white shrink-0 sticky top-0 h-screen overflow-y-auto flex flex-col justify-between p-8 border-r border-slate-800">
-            <div>
-                <div class="pb-8 border-b border-slate-800">
-                    <span class="text-3xl font-black tracking-wider text-white block">OLKANAS</span>
-                    <span class="text-xs font-medium text-slate-400 uppercase tracking-widest mt-1 block">Tingkat Nasional</span>
+<body class="bg-white text-gray-900">
+    
+    <!-- ====== START NAVBAR (MOBILE) ====== -->
+    <nav class="lg:hidden fixed top-0 left-0 right-0 bg-white border-b-4 border-gold z-40 shadow-md">
+        <div class="flex items-center justify-between px-4 h-16">
+            <!-- LOGO PLACEHOLDER (MOBILE) - GANTI DENGAN GAMBAR LOGO ANDA -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-navy rounded-lg flex items-center justify-center">
+                    <span class="text-xs font-bold text-white">LOGO</span>
                 </div>
-
-                <nav class="mt-8 space-y-2">
-                    <a href="#beranda" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-slate-800 text-white transition group">
-                        <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 00-1 1m-6 0h6"></path>
-                        </svg>
+                <span class="text-lg font-bold text-navy hidden sm:inline">OLASKA</span>
+            </div>
+            
+            <!-- Hamburger Button -->
+            <button id="hamburger-btn" class="hamburger-open flex flex-col gap-1.5 cursor-pointer">
+                <span class="hamburger-line w-6 h-0.5 bg-navy block"></span>
+                <span class="hamburger-line w-6 h-0.5 bg-navy block"></span>
+                <span class="hamburger-line w-6 h-0.5 bg-navy block"></span>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- ====== START MOBILE MENU (SIDEBAR OVERLAY) ====== -->
+    <div id="mobile-menu" class="mobile-menu lg:hidden fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-white border-r-4 border-gold z-30 overflow-y-auto">
+        <nav class="flex flex-col py-6 space-y-2 px-4">
+            <a href="#beranda" class="block px-4 py-2 rounded-lg text-navy hover:bg-blue-50 transition-colors font-medium hover-gold">
+                Beranda
+            </a>
+            <a href="#history" class="block px-4 py-2 rounded-lg text-navy hover:bg-blue-50 transition-colors font-medium hover-gold">
+                History
+            </a>
+            <a href="#hasil-lomba" class="block px-4 py-2 rounded-lg text-navy hover:bg-blue-50 transition-colors font-medium hover-gold">
+                Hasil Lomba
+            </a>
+        </nav>
+    </div>
+    
+    <!-- ====== START MAIN LAYOUT (SIDEBAR + CONTENT) ====== -->
+    <div class="flex">
+        
+        <!-- ====== START SIDEBAR (DESKTOP ONLY) ====== -->
+        <aside class="hidden lg:flex flex-col w-64 bg-gradient-to-b from-blue-50 to-white border-r-4 border-gold sticky top-0 h-screen shadow-lg">
+            <div class="sidebar-wrapper p-8 flex flex-col">
+                
+                <!-- LOGO PLACEHOLDER (SIDEBAR DESKTOP) - GANTI DENGAN GAMBAR LOGO ANDA -->
+                <div class="mb-8 pb-6 border-b-2 border-gold">
+                    <div class="w-16 h-16 bg-navy rounded-lg flex items-center justify-center mx-auto shadow-md">
+                        <span class="text-xs font-bold text-white text-center px-2">LOGO</span>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Header -->
+                <div class="mb-12 text-center">
+                    <h2 class="text-2xl font-bold text-navy">OLASKA</h2>
+                    <p class="text-sm text-navy mt-1 font-medium">Olimpiade Sains dan Kreativitas Siswa</p>
+                </div>
+                
+                <!-- Sidebar Navigation -->
+                <nav class="flex flex-col space-y-1">
+                    <a href="#beranda" class="px-4 py-3 rounded-lg text-navy hover:bg-gold/20 hover:text-navy transition-all font-medium border-l-4 border-transparent hover:border-gold">
                         Beranda
                     </a>
-                    <a href="#history" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition group">
-                        <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        History (Event Lalu)
+                    <a href="#history" class="px-4 py-3 rounded-lg text-navy hover:bg-gold/20 hover:text-navy transition-all font-medium border-l-4 border-transparent hover:border-gold">
+                        History
                     </a>
-                    <a href="#hasil-lomba" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition group">
-                        <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-                        </svg>
+                    <a href="#hasil-lomba" class="px-4 py-3 rounded-lg text-navy hover:bg-gold/20 hover:text-navy transition-all font-medium border-l-4 border-transparent hover:border-gold">
                         Hasil Lomba
                     </a>
-                    <a href="#timeline" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition group">
-                        <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        Timeline & Regulasi
-                    </a>
                 </nav>
-            </div>
-
-            <div class="pt-6 border-t border-slate-800">
-                <p class="text-xs text-slate-500 text-center">© 2026 OLKANAS. All rights reserved.</p>
+                
             </div>
         </aside>
-        <main class="flex-1 p-6 lg:p-12 space-y-16 overflow-hidden">
-
-            <section id="beranda" class="bg-white rounded-2xl p-8 lg:p-12 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
-                <div class="flex-1 space-y-6">
-                    <div class="inline-block px-3 py-1 bg-slate-100 border border-slate-200 rounded-full text-xs font-semibold uppercase tracking-wider text-slate-700">
-                        Olimpiade Nasional 2026
-                    </div>
-                    <h1 class="text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
-                        OLKANAS
-                    </h1>
-                    <p class="text-lg font-medium text-slate-600">
-                        Olimpiade Sains dan Kreativitas Siswa
-                    </p>
-                    <p class="text-sm text-slate-500 leading-relaxed max-w-xl">
-                        Ajang kompetisi sains dan kreativitas bergengsi tingkat nasional yang dirancang khusus untuk menguji, mengasah, dan mengapresiasi potensi akademik serta pemikiran kritis generasi muda Indonesia.
-                    </p>
+        
+        <!-- ====== START MAIN CONTENT AREA ====== -->
+        <main class="flex-1 w-full lg:pt-0 pt-16">
+            
+            <!-- ====== START HERO SECTION ====== -->
+            <section id="beranda" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 px-4 lg:px-12 py-12 lg:py-0 relative overflow-hidden">
+                <!-- Decorative Background Elements -->
+                <div class="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full -mr-48 -mt-48"></div>
+                <div class="absolute bottom-0 left-0 w-80 h-80 bg-navy/5 rounded-full -ml-40 -mb-40"></div>
+                
+                <div class="max-w-2xl w-full relative z-10">
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-1">Target Jenjang</span>
-                            <span class="text-sm font-bold text-slate-800">SMP & SMA / Sederajat</span>
-                        </div>
-                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-1">Mata Pelajaran</span>
-                            <span class="text-sm font-bold text-slate-800">Matematika, B. Indonesia, B. Inggris, IPA</span>
+                    <!-- LOGO PLACEHOLDER (HERO) - GANTI DENGAN GAMBAR LOGO ANDA -->
+                    <div class="mb-12 flex justify-center">
+                        <div class="w-24 h-24 lg:w-32 lg:h-32 bg-navy rounded-2xl flex items-center justify-center shadow-xl transform hover:scale-110 transition-transform duration-300">
+                            <span class="text-xs font-bold text-white text-center px-2">LOGO</span>
                         </div>
                     </div>
-
-                    <div class="pt-4">
-                        <a href="https://google.com" target="_blank" rel="noopener noreferrer" class="inline-block w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-base text-center rounded-xl shadow-lg transition duration-200 transform hover:-translate-y-0.5">
+                    
+                    <!-- Hero Headline -->
+                    <div class="mb-8 lg:mb-12 text-center">
+                        <h1 class="text-4xl lg:text-6xl font-bold text-navy leading-tight mb-4">
+                            OLASKA
+                        </h1>
+                        <div class="w-24 h-1 bg-gold mx-auto mb-8"></div>
+                        <p class="text-xl lg:text-2xl text-navy font-medium mb-8">
+                            Olimpiade Sains dan Kreativitas Siswa
+                        </p>
+                    </div>
+                    
+                    <!-- Target Jenjang -->
+                    <div class="mb-10">
+                        <h3 class="text-sm font-bold text-navy uppercase tracking-wider mb-4 text-center">
+                            Tingkat Jenjang
+                        </h3>
+                        <div class="flex flex-wrap gap-3 justify-center">
+                            <span class="badge-navy px-4 py-2 rounded-full font-semibold">
+                                SD
+                            </span>
+                            <span class="badge-navy px-4 py-2 rounded-full font-semibold">
+                                SMP
+                            </span>
+                            <span class="badge-navy px-4 py-2 rounded-full font-semibold">
+                                SMA
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Mata Pelajaran -->
+                    <div class="mb-14">
+                        <h3 class="text-sm font-bold text-navy uppercase tracking-wider mb-4 text-center">
+                            Mata Pelajaran
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto">
+                            <span class="badge-navy px-4 py-2 rounded-full font-semibold text-center">
+                                Matematika
+                            </span>
+                            <span class="badge-navy px-4 py-2 rounded-full font-semibold text-center">
+                                B. Indonesia
+                            </span>
+                            <span class="badge-navy px-4 py-2 rounded-full font-semibold text-center">
+                                B. Inggris
+                            </span>
+                            <span class="badge-navy px-4 py-2 rounded-full font-semibold text-center">
+                                IPA
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- CTA Button -->
+                    <div class="flex justify-center gap-4">
+                        <a href="https://google.com" target="_blank" class="btn-cta px-8 py-4 text-white font-bold text-lg rounded-lg shadow-lg inline-block">
                             DAFTAR SEKARANG
                         </a>
                     </div>
+                    
                 </div>
             </section>
-            <section class="bg-white rounded-2xl p-8 lg:p-12 border border-slate-200 shadow-sm">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-slate-900">Poster Resmi Lomba</h2>
-                    <p class="text-sm text-slate-500 mt-1">Informasi visual lengkap dan panduan singkat penyelenggaraan OLKANAS.</p>
-                </div>
-                
-                <div class="max-w-md mx-auto w-full">
-                    <div class="aspect-square-custom bg-slate-100 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center p-6 text-center group hover:border-slate-400 transition">
-                        <svg class="w-16 h-16 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 002-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        <span class="text-sm font-bold text-slate-700 mb-1">Bingkai Poster Lomba</span>
-                        <span class="text-xs text-slate-400">Rasio Sempurna 1:1 (Persegi)</span>
-                        <span class="text-[10px] text-slate-400 mt-4 bg-slate-200 px-2 py-1 rounded">Tempatkan Tag &lt;img&gt; di sini</span>
+            <!-- ====== END HERO SECTION ====== -->
+            
+            <!-- ====== START TIMELINE & REGULASI SECTION ====== -->
+            <section id="timeline" class="bg-gradient-to-r from-blue-50 to-white px-4 lg:px-12 py-16 lg:py-24 border-t-4 border-gold">
+                <div class="max-w-5xl">
+                    
+                    <h2 class="text-3xl lg:text-4xl font-bold text-navy mb-4">
+                        Timeline Acara
+                    </h2>
+                    <p class="text-lg text-navy/70 mb-12 max-w-2xl font-medium">
+                        Jadwal pelaksanaan kompetisi OLASKA untuk tahun ini
+                    </p>
+                    
+                    <!-- Timeline Grid Placeholder -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                        
+                        <!-- Timeline Item 1: Pendaftaran -->
+                        <div class="bg-white border-l-4 border-gold rounded-lg p-6 lg:p-8 min-h-48 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow">
+                            <div>
+                                <div class="inline-block px-3 py-1 badge-gold rounded-full text-xs font-semibold mb-4">
+                                    FASE 1
+                                </div>
+                                <h3 class="text-xl font-bold text-navy mb-3">
+                                    Pendaftaran
+                                </h3>
+                                <p class="text-navy/60 text-sm leading-relaxed">
+                                    Peserta dapat mendaftar melalui portal resmi dengan mengisi formulir yang disediakan.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-6 border-t border-gold/30">
+                                <p class="text-sm font-semibold text-navy">
+                                    Tanggal: <span class="text-navy font-bold">[Placeholder]</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline Item 2: Pelaksanaan -->
+                        <div class="bg-white border-l-4 border-gold rounded-lg p-6 lg:p-8 min-h-48 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow">
+                            <div>
+                                <div class="inline-block px-3 py-1 badge-gold rounded-full text-xs font-semibold mb-4">
+                                    FASE 2
+                                </div>
+                                <h3 class="text-xl font-bold text-navy mb-3">
+                                    Pelaksanaan
+                                </h3>
+                                <p class="text-navy/60 text-sm leading-relaxed">
+                                    Kompetisi dilaksanakan secara serentak di berbagai lokasi dengan pengawasan resmi.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-6 border-t border-gold/30">
+                                <p class="text-sm font-semibold text-navy">
+                                    Tanggal: <span class="text-navy font-bold">[Placeholder]</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline Item 3: Pengumuman -->
+                        <div class="bg-white border-l-4 border-red rounded-lg p-6 lg:p-8 min-h-48 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow">
+                            <div>
+                                <div class="inline-block px-3 py-1 badge-red rounded-full text-xs font-semibold mb-4">
+                                    FASE 3
+                                </div>
+                                <h3 class="text-xl font-bold text-navy mb-3">
+                                    Pengumuman
+                                </h3>
+                                <p class="text-navy/60 text-sm leading-relaxed">
+                                    Hasil penilaian dan pengumuman pemenang akan diumumkan melalui portal resmi.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-6 border-t border-red/30">
+                                <p class="text-sm font-semibold text-navy">
+                                    Tanggal: <span class="text-navy font-bold">[Placeholder]</span>
+                                </p>
+                            </div>
+                        </div>
+                        
                     </div>
+                    
                 </div>
             </section>
-            <section id="timeline" class="bg-white rounded-2xl p-8 lg:p-12 border border-slate-200 shadow-sm space-y-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900">Timeline & Regulasi</h2>
-                    <p class="text-sm text-slate-500 mt-1">Jadwal pelaksanaan alur seleksi kompetisi OLKANAS 2026.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="p-6 rounded-xl border border-slate-200 bg-slate-50 relative">
-                        <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm flex items-center justify-center mb-4">1</div>
-                        <h3 class="font-bold text-slate-900 mb-1">Pendaftaran</h3>
-                        <p class="text-xs text-slate-500 mb-3">01 Mei - 30 Juni 2026</p>
-                        <p class="text-sm text-slate-600">Proses pengisian formulir online dan verifikasi berkas administrasi peserta.</p>
+            <!-- ====== END TIMELINE & REGULASI SECTION ====== -->
+            
+            <!-- ====== START MEDIA POSTER SECTION ====== -->
+            <section id="poster" class="bg-white px-4 lg:px-12 py-16 lg:py-24 border-t-4 border-gold">
+                <div class="max-w-5xl">
+                    
+                    <h2 class="text-3xl lg:text-4xl font-bold text-navy mb-4">
+                        Poster Resmi
+                    </h2>
+                    <p class="text-lg text-navy/70 mb-12 max-w-2xl font-medium">
+                        Poster kampanye dan identitas visual OLASKA
+                    </p>
+                    
+                    <!-- Poster Image Container (1:1 Aspect Ratio) -->
+                    <div class="flex justify-center">
+                        <div class="w-full max-w-md">
+                            <!-- Placeholder untuk Poster -->
+                            <div class="aspect-square bg-gradient-to-br from-blue-50 to-blue-100 border-4 border-gold rounded-xl overflow-hidden flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
+                                <div class="text-center">
+                                    <svg class="w-16 h-16 text-navy/40 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <p class="text-navy font-bold text-lg">
+                                        Gambar Poster
+                                    </p>
+                                    <p class="text-navy/60 text-sm mt-2 font-medium">
+                                        1200 x 1200 px
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="p-6 rounded-xl border border-slate-200 bg-slate-50 relative">
-                        <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm flex items-center justify-center mb-4">2</div>
-                        <h3 class="font-bold text-slate-900 mb-1">Pelaksanaan</h3>
-                        <p class="text-xs text-slate-500 mb-3">15 Juli 2026</p>
-                        <p class="text-sm text-slate-600">Pelaksanaan ujian kompetisi secara daring terpusat melalui platform OLKANAS.</p>
+                    
+                    <!-- Poster Description -->
+                    <div class="mt-8 text-center max-w-2xl mx-auto">
+                        <p class="text-navy/70 text-base leading-relaxed font-medium">
+                            Gunakan poster resmi OLASKA untuk mempromosikan kompetisi di sekolah dan komunitas Anda.
+                        </p>
                     </div>
-
-                    <div class="p-6 rounded-xl border border-slate-200 bg-slate-50 relative">
-                        <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm flex items-center justify-center mb-4">3</div>
-                        <h3 class="font-bold text-slate-900 mb-1">Pengumuman</h3>
-                        <p class="text-xs text-slate-500 mb-3">25 Juli 2026</p>
-                        <p class="text-sm text-slate-600">Pengumuman pemenang, pembagian sertifikat digital, dan penetapan juara nasional.</p>
-                    </div>
+                    
                 </div>
             </section>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <section id="history" class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
-                    <h2 class="text-xl font-bold text-slate-900 mb-2">History Event</h2>
-                    <p class="text-sm text-slate-500 mb-4">Rekam jejak dan dokumentasi penyelenggaraan OLKANAS tahun lalu.</p>
-                    <div class="h-32 bg-slate-50 border border-dashed border-slate-200 rounded-xl flex items-center justify-center text-xs text-slate-400">
-                        [ Placeholder Content History Lomba ]
+            <!-- ====== END MEDIA POSTER SECTION ====== -->
+            
+            <!-- ====== START HISTORY SECTION ====== -->
+            <section id="history" class="bg-gradient-to-r from-blue-50 to-white px-4 lg:px-12 py-16 lg:py-24 border-t-4 border-gold">
+                <div class="max-w-5xl">
+                    
+                    <h2 class="text-3xl lg:text-4xl font-bold text-navy mb-4">
+                        Event Tahun Lalu
+                    </h2>
+                    <p class="text-lg text-navy/70 mb-12 max-w-2xl font-medium">
+                        Ringkasan pelaksanaan OLASKA tahun-tahun sebelumnya
+                    </p>
+                    
+                    <!-- History Grid Placeholder -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                        
+                        <!-- History Item 1 -->
+                        <div class="bg-white border-l-4 border-gold rounded-lg p-6 lg:p-8 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="mb-6 pb-4 border-b-2 border-gold">
+                                <h3 class="text-3xl font-bold text-gold">
+                                    2023
+                                </h3>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl font-bold text-gold mt-0.5">★</span>
+                                    <p class="text-navy/70">
+                                        <span class="font-bold text-navy">1,200+</span> peserta dari seluruh Indonesia
+                                    </p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl font-bold text-gold mt-0.5">★</span>
+                                    <p class="text-navy/70">
+                                        <span class="font-bold text-navy">15</span> sekolah terbaik
+                                    </p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl font-bold text-gold mt-0.5">★</span>
+                                    <p class="text-navy/70">
+                                        Pelaksanaan di <span class="font-bold text-navy">10 kota besar</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- History Item 2 -->
+                        <div class="bg-white border-l-4 border-red rounded-lg p-6 lg:p-8 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="mb-6 pb-4 border-b-2 border-red">
+                                <h3 class="text-3xl font-bold text-red">
+                                    2024
+                                </h3>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl font-bold text-red mt-0.5">★</span>
+                                    <p class="text-navy/70">
+                                        <span class="font-bold text-navy">1,500+</span> peserta dari seluruh Indonesia
+                                    </p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl font-bold text-red mt-0.5">★</span>
+                                    <p class="text-navy/70">
+                                        <span class="font-bold text-navy">20</span> sekolah terbaik
+                                    </p>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl font-bold text-red mt-0.5">★</span>
+                                    <p class="text-navy/70">
+                                        Pelaksanaan di <span class="font-bold text-navy">12 kota besar</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
-                </section>
-
-                <section id="hasil-lomba" class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
-                    <h2 class="text-xl font-bold text-slate-900 mb-2">Hasil Lomba</h2>
-                    <p class="text-sm text-slate-500 mb-4">Pengumuman resmi pemenang dan daftar peraih medali.</p>
-                    <div class="h-32 bg-slate-50 border border-dashed border-slate-200 rounded-xl flex items-center justify-center text-xs text-slate-400">
-                        [ Placeholder Content Pengumuman / Hasil ]
+                    
+                </div>
+            </section>
+            <!-- ====== END HISTORY SECTION ====== -->
+            
+            <!-- ====== START HASIL LOMBA SECTION ====== -->
+            <section id="hasil-lomba" class="bg-white px-4 lg:px-12 py-16 lg:py-24 border-t-4 border-gold">
+                <div class="max-w-5xl">
+                    
+                    <h2 class="text-3xl lg:text-4xl font-bold text-navy mb-4">
+                        Hasil Lomba
+                    </h2>
+                    <p class="text-lg text-navy/70 mb-12 max-w-2xl font-medium">
+                        Daftar pemenang dan juara kompetisi OLASKA
+                    </p>
+                    
+                    <!-- Results Placeholder Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                        
+                        <!-- Result Card 1: Juara 1 -->
+                        <div class="bg-gradient-to-br from-gold/10 to-gold/5 border-2 border-gold rounded-xl p-6 lg:p-8 text-center shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+                            <div class="inline-block w-16 h-16 bg-gold rounded-full flex items-center justify-center mb-4 shadow-lg">
+                                <span class="text-3xl font-bold text-navy">1</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-navy mb-2">
+                                Juara 1
+                            </h3>
+                            <p class="text-navy/70 text-sm font-medium">
+                                [Nama Sekolah / Peserta]
+                            </p>
+                            <p class="text-navy/50 text-xs mt-2">
+                                Kategori: [Kategori]
+                            </p>
+                        </div>
+                        
+                        <!-- Result Card 2: Juara 2 -->
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-navy rounded-xl p-6 lg:p-8 text-center shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+                            <div class="inline-block w-16 h-16 bg-navy rounded-full flex items-center justify-center mb-4 shadow-lg">
+                                <span class="text-3xl font-bold text-white">2</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-navy mb-2">
+                                Juara 2
+                            </h3>
+                            <p class="text-navy/70 text-sm font-medium">
+                                [Nama Sekolah / Peserta]
+                            </p>
+                            <p class="text-navy/50 text-xs mt-2">
+                                Kategori: [Kategori]
+                            </p>
+                        </div>
+                        
+                        <!-- Result Card 3: Juara 3 -->
+                        <div class="bg-gradient-to-br from-red/10 to-red/5 border-2 border-red rounded-xl p-6 lg:p-8 text-center shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+                            <div class="inline-block w-16 h-16 bg-red rounded-full flex items-center justify-center mb-4 shadow-lg">
+                                <span class="text-3xl font-bold text-white">3</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-navy mb-2">
+                                Juara 3
+                            </h3>
+                            <p class="text-navy/70 text-sm font-medium">
+                                [Nama Sekolah / Peserta]
+                            </p>
+                            <p class="text-navy/50 text-xs mt-2">
+                                Kategori: [Kategori]
+                            </p>
+                        </div>
+                        
                     </div>
-                </section>
-            </div>
-            </main>
-        </div>
-
+                    
+                </div>
+            </section>
+            <!-- ====== END HASIL LOMBA SECTION ====== -->
+            
+            <!-- ====== START FOOTER ====== -->
+            <footer class="bg-navy text-white px-4 lg:px-12 py-12 border-t-4 border-gold">
+                <div class="max-w-5xl">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-gold">OLASKA</h3>
+                            <p class="text-white/70 text-sm leading-relaxed">
+                                Olimpiade Sains dan Kreativitas Siswa
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3 text-gold">Navigasi</h4>
+                            <ul class="space-y-2 text-sm text-white/70">
+                                <li><a href="#beranda" class="hover:text-gold transition-colors font-medium">Beranda</a></li>
+                                <li><a href="#history" class="hover:text-gold transition-colors font-medium">History</a></li>
+                                <li><a href="#hasil-lomba" class="hover:text-gold transition-colors font-medium">Hasil Lomba</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3 text-gold">Kontak</h4>
+                            <p class="text-sm text-white/70 leading-relaxed">
+                                Email: <span class="text-white font-medium">info@olaska.com</span><br>
+                                Telepon: <span class="text-white font-medium">+62 (0) XXX-XXXX-XXXX</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="border-t border-white/20 pt-8">
+                        <p class="text-white/60 text-sm text-center">
+                            &copy; 2024 OLASKA. Semua hak cipta dilindungi.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+            <!-- ====== END FOOTER ====== -->
+            
+        </main>
+        
+    </div>
+    
+    <!-- ====== JAVASCRIPT FOR MOBILE MENU ====== -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const backdrop = document.getElementById('mobile-menu-backdrop');
-            const menuIcon = document.getElementById('menu-icon');
-            const closeIcon = document.getElementById('close-icon');
-            const navLinks = document.querySelectorAll('.mobile-nav-link');
-
-            function toggleMenu() {
-                const isOpen = !mobileMenu.classList.contains('-translate-x-full');
-
-                if (isOpen) {
-                    // Tutup Menu
-                    mobileMenu.classList.add('-translate-x-full');
-                    backdrop.classList.add('opacity-0');
-                    setTimeout(() => backdrop.classList.add('hidden'), 300);
-                    menuIcon.classList.remove('hidden');
-                    closeIcon.classList.add('hidden');
-                } else {
-                    // Buka Menu
-                    backdrop.classList.remove('hidden');
-                    setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
-                    mobileMenu.classList.remove('-translate-x-full');
-                    menuIcon.classList.add('hidden');
-                    closeIcon.classList.remove('hidden');
-                }
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        // Toggle mobile menu when hamburger is clicked
+        hamburgerBtn.addEventListener('click', function() {
+            hamburgerBtn.classList.toggle('hamburger-open');
+            mobileMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when a link is clicked
+        const menuLinks = mobileMenu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hamburgerBtn.classList.remove('hamburger-open');
+                mobileMenu.classList.remove('active');
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = mobileMenu.contains(event.target);
+            const isClickOnHamburger = hamburgerBtn.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickOnHamburger && mobileMenu.classList.contains('active')) {
+                hamburgerBtn.classList.remove('hamburger-open');
+                mobileMenu.classList.remove('active');
             }
-
-            menuBtn.addEventListener('click', toggleMenu);
-            backdrop.addEventListener('click', toggleMenu);
-
-            // Tutup mobile menu otomatis jika link navigasi diklik
-            navLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    if (!mobileMenu.classList.contains('-translate-x-full')) {
-                        toggleMenu();
-                    }
-                });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && document.querySelector(href)) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
     </script>
+    
 </body>
 </html>
